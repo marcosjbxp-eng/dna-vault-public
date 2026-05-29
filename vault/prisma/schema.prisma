@@ -1,0 +1,137 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+
+  accounts Account[]
+  sessions Session[]
+  orders   Order[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Game {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String   @db.Text
+  coverUrl    String
+  images      String[] // array de URLs para gallery
+  trailerUrl  String?
+  price       Decimal  @db.Decimal(10, 2)
+  genres      String[]
+  platforms   String[]
+  developer   String
+  publisher   String?
+  releaseDate DateTime
+  featured    Boolean  @default(false)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  keys       Key[]
+  orderItems OrderItem[]
+}
+
+model Key {
+  id        String    @id @default(cuid())
+  code      String    @unique // a key em si — nunca exposta sem pagamento
+  gameId    String
+  game      Game      @relation(fields: [gameId], references: [id])
+  status    KeyStatus @default(AVAILABLE)
+  orderId   String?
+  order     Order?    @relation(fields: [orderId], references: [id])
+  createdAt DateTime  @default(now())
+  usedAt    DateTime?
+}
+
+enum KeyStatus {
+  AVAILABLE
+  RESERVED
+  DELIVERED
+  REFUNDED
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  userId         String
+  user           User        @relation(fields: [userId], references: [id])
+  status         OrderStatus @default(PENDING)
+  totalAmount    Decimal     @db.Decimal(10, 2)
+  mpPaymentId    String? // ID retornado pelo Mercado Pago
+  mpPreferenceId String?
+  paymentMethod  String? // 'pix' | 'credit_card' | 'boleto'
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  items OrderItem[]
+  keys  Key[]
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  DELIVERING
+  DELIVERED
+  FAILED
+  REFUNDED
+}
+
+model OrderItem {
+  id       String  @id @default(cuid())
+  orderId  String
+  order    Order   @relation(fields: [orderId], references: [id])
+  gameId   String
+  game     Game    @relation(fields: [gameId], references: [id])
+  price    Decimal @db.Decimal(10, 2) // preço no momento da compra
+  quantity Int     @default(1)
+}
+
+// NextAuth required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

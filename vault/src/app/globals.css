@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: var(--void);
+  --color-surface: var(--surface);
+  --color-panel: var(--panel);
+  --color-border: var(--border);
+  --color-flare: var(--flare);
+  --color-flare-dim: var(--flare-dim);
+  --color-ice: var(--ice);
+  --color-ice-dim: var(--ice-dim);
+  --color-smoke: var(--smoke);
+  --color-mist: var(--mist);
+  --color-white: var(--white);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+
+  --font-sans: var(--font-syne), "Arial", sans-serif;
+  --font-mono: var(--font-dm-mono), monospace;
+}
+
+:root {
+  /* Backgrounds */
+  --void:      #0A0C10;   /* bg principal — quase preto azulado */
+  --surface:   #111520;   /* cards, painéis primários */
+  --panel:     #1C2133;   /* elevação secundária */
+  --border:    #2A3148;   /* linhas, divisores */
+
+  /* Accent */
+  --flare:     #E8FF47;   /* amarelo-lima elétrico — CTA principal, preços */
+  --flare-dim: #B8CC38;   /* hover do flare */
+  --ice:       #A8C4FF;   /* azul gelo — links, badges, destaques 2 */
+  --ice-dim:   #6E94E8;   /* hover/variante do ice */
+
+  /* Texto */
+  --smoke:     #8A93A8;   /* texto secundário, placeholders */
+  --mist:      #C8D0E0;   /* texto primário */
+  --white:     #F0F4FF;   /* títulos, máximo contraste */
+
+  /* Semânticas */
+  --danger:    #FF5050;   /* erros, alertas críticos */
+  --success:   #3DFFA0;   /* confirmações, conquistas, keys entregues */
+}
+
+body {
+  background: var(--void);
+  color: var(--mist);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
