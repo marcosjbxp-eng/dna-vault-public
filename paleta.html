@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paleta — VAULT Game Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    /* ── CORE PALETTE ── */
+    --void:       #0A0C10;   /* bg principal — quase preto azulado */
+    --surface:    #111520;   /* cards, painéis */
+    --panel:      #1C2133;   /* elevação secundária */
+    --border:     #2A3148;   /* linhas, divisores */
+
+    --flare:      #E8FF47;   /* amarelo-lima elétrico — CTA principal */
+    --flare-dim:  #B8CC38;   /* hover do flare */
+
+    --ice:        #A8C4FF;   /* azul gelo — links, destaques secundários */
+    --ice-dim:    #6E94E8;   /* variante mais saturada */
+
+    --smoke:      #8A93A8;   /* texto secundário */
+    --mist:       #C8D0E0;   /* texto primário */
+    --white:      #F0F4FF;   /* títulos, máximo contraste */
+
+    --danger:     #FF5050;   /* erros, alertas */
+    --success:    #3DFFA0;   /* conquistas, confirmações */
+  }
+
+  body {
+    background: var(--void);
+    font-family: 'Syne', sans-serif;
+    color: var(--mist);
+    min-height: 100vh;
+    padding: 48px 32px 80px;
+  }
+
+  /* ─ Header ─ */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 56px;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .brand-icon {
+    width: 42px; height: 42px;
+    background: var(--flare);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-icon svg { width: 22px; height: 22px; }
+  .brand-name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    text-transform: uppercase;
+  }
+  .brand-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--smoke);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .header-right {
+    text-align: right;
+  }
+  .header-right h1 {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--smoke);
+  }
+  .header-right p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--border);
+    margin-top: 4px;
+  }
+
+  /* ─ Section titles ─ */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─ Main swatches ─ */
+  .main-swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+  .swatch {
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: transform 0.2s ease;
+  }
+  .swatch:hover { transform: translateY(-3px); z-index: 2; }
+  .swatch-label {
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1;
+  }
+  .swatch-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    margin-top: 5px;
+    opacity: 0.7;
+  }
+  .swatch-hex {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+    opacity: 0.55;
+  }
+
+  /* ─ Role badges ─ */
+  .role-badge {
+    position: absolute;
+    top: 14px; right: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 3px;
+    background: rgba(0,0,0,0.35);
+  }
+
+  /* swatch colors */
+  .sw-void    { background: #0A0C10; }
+  .sw-surface { background: #111520; border: 1px solid #1C2133; }
+  .sw-panel   { background: #1C2133; }
+  .sw-border  { background: #2A3148; }
+  .sw-flare   { background: #E8FF47; }
+  .sw-ice     { background: #A8C4FF; }
+  .sw-mist    { background: #C8D0E0; }
+  .sw-smoke   { background: #8A93A8; }
+
+  .sw-void .swatch-label,
+  .sw-surface .swatch-label,
+  .sw-panel .swatch-label,
+  .sw-border .swatch-label { color: #F0F4FF; }
+  .sw-void .swatch-name,
+  .sw-surface .swatch-name,
+  .sw-panel .swatch-name,
+  .sw-border .swatch-name { color: #F0F4FF; }
+  .sw-void .swatch-hex,
+  .sw-surface .swatch-hex,
+  .sw-panel .swatch-hex,
+  .sw-border .swatch-hex { color: #F0F4FF; }
+
+  .sw-flare .swatch-label,
+  .sw-flare .swatch-name,
+  .sw-flare .swatch-hex,
+  .sw-flare .role-badge { color: #0A0C10; }
+
+  .sw-ice .swatch-label,
+  .sw-mist .swatch-label,
+  .sw-smoke .swatch-label { color: #0A0C10; }
+  .sw-ice .swatch-name,
+  .sw-mist .swatch-name,
+  .sw-smoke .swatch-name { color: #0A0C10; }
+  .sw-ice .swatch-hex,
+  .sw-mist .swatch-hex,
+  .sw-smoke .swatch-hex { color: #0A0C10; }
+  .sw-ice .role-badge,
+  .sw-mist .role-badge,
+  .sw-smoke .role-badge { color: #0A0C10; }
+
+  /* accent row */
+  .accent-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+  .sw-danger  { background: #FF5050; height: 80px; }
+  .sw-success { background: #3DFFA0; height: 80px; }
+  .sw-danger .swatch-label,
+  .sw-success .swatch-label { color: #0A0C10; }
+  .sw-danger .swatch-name,
+  .sw-success .swatch-name,
+  .sw-danger .swatch-hex,
+  .sw-success .swatch-hex { color: #0A0C10; }
+
+  /* ─ Usage section ─ */
+  .usage-section { margin-top: 56px; }
+  .usage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 640px) { .usage-grid { grid-template-columns: 1fr; } }
+
+  .usage-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .usage-card h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--smoke);
+    margin-bottom: 16px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── Mockup: Product card ── */
+  .mock-game-card {
+    background: var(--panel);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .mock-game-thumb {
+    height: 110px;
+    background: linear-gradient(135deg, #1C2133 0%, #2A3148 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .mock-game-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent, transparent 8px,
+      rgba(168,196,255,0.04) 8px, rgba(168,196,255,0.04) 9px
+    );
+  }
+  .mock-thumb-inner {
+    width: 48px; height: 48px;
+    background: var(--border);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    z-index: 1;
+  }
+  .mock-game-info { padding: 14px; }
+  .mock-game-info .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ice);
+    border: 1px solid var(--ice-dim);
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-bottom: 6px;
+  }
+  .mock-game-info .title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+  .mock-game-info .price-row {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .mock-game-info .price {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--flare);
+  }
+  .mock-btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--flare);
+    color: var(--void);
+    border: none;
+    padding: 7px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* ── Mockup: Nav bar ── */
+  .mock-nav {
+    background: var(--void);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .mock-nav-logo {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .mock-nav-links {
+    display: flex; gap: 16px; flex: 1;
+  }
+  .mock-nav-link {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--smoke);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .mock-nav-link.active { color: var(--mist); }
+  .mock-nav-cta {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: var(--flare);
+    color: var(--void);
+    padding: 7px 14px;
+    border-radius: 5px;
+    text-transform: uppercase;
+  }
+
+  /* ── Mockup: Banner ── */
+  .mock-banner {
+    background: var(--panel);
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .mock-banner::before {
+    content: '';
+    position: absolute;
+    right: -30px; top: -30px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,255,71,0.12) 0%, transparent 70%);
+  }
+  .mock-banner .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--flare);
+    margin-bottom: 8px;
+  }
+  .mock-banner h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .mock-banner p {
+    font-size: 12px;
+    color: var(--smoke);
+    margin-bottom: 18px;
+  }
+  .mock-banner-btns { display: flex; gap: 8px; }
+  .btn-primary {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--flare);
+    color: var(--void);
+    border: none; padding: 9px 18px;
+    border-radius: 5px; cursor: pointer;
+  }
+  .btn-ghost {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--mist);
+    border: 1px solid var(--border);
+    padding: 9px 18px;
+    border-radius: 5px; cursor: pointer;
+  }
+
+  /* ── Typography sample ── */
+  .mock-typo { }
+  .t-display {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .t-sub {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--mist);
+    margin-bottom: 4px;
+  }
+  .t-body {
+    font-size: 12px;
+    color: var(--smoke);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .t-mono {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ice);
+    letter-spacing: 0.06em;
+  }
+
+  /* ─ Variables table ─ */
+  .vars-section { margin-top: 56px; }
+  .vars-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+  .vars-table th {
+    text-align: left;
+    padding: 8px 16px;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    border-bottom: 1px solid var(--border);
+  }
+  .vars-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(42,49,72,0.5);
+    vertical-align: middle;
+  }
+  .vars-table tr:hover td { background: var(--surface); }
+  .td-dot {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+  .td-var { color: var(--ice-dim); }
+  .td-hex { color: var(--smoke); }
+  .td-role { color: var(--mist); }
+
+  /* ─ Footer ─ */
+  .footer {
+    margin-top: 72px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--border);
+    letter-spacing: 0.08em;
+  }
+  .footer-dots { display: flex; gap: 6px; }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="8" height="8" rx="1.5" fill="#0A0C10"/>
+        <rect x="12" y="2" width="8" height="8" rx="1.5" fill="#0A0C10"/>
+        <rect x="2" y="12" width="8" height="8" rx="1.5" fill="#0A0C10"/>
+        <rect x="14" y="14" width="4" height="4" rx="1" fill="#0A0C10"/>
+        <rect x="14" y="12" width="2" height="2" rx="0.5" fill="#0A0C10" opacity="0.5"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name">Vault</div>
+      <div class="brand-sub">Game Store</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <h1>Guia de Paleta</h1>
+    <p>v1.0 — 2026</p>
+  </div>
+</header>
+
+<!-- Main swatches -->
+<div class="section-label">Cores principais</div>
+<div class="main-swatches">
+  <div class="swatch sw-void">
+    <span class="role-badge">BG Principal</span>
+    <div class="swatch-label">Void</div>
+    <div class="swatch-name">Fundo base</div>
+    <div class="swatch-hex">#0A0C10</div>
+  </div>
+  <div class="swatch sw-surface">
+    <span class="role-badge">Surface 1</span>
+    <div class="swatch-label">Surface</div>
+    <div class="swatch-name">Cards, painéis</div>
+    <div class="swatch-hex">#111520</div>
+  </div>
+  <div class="swatch sw-panel">
+    <span class="role-badge">Surface 2</span>
+    <div class="swatch-label">Panel</div>
+    <div class="swatch-name">Elevação secundária</div>
+    <div class="swatch-hex">#1C2133</div>
+  </div>
+  <div class="swatch sw-border">
+    <span class="role-badge">Divisor</span>
+    <div class="swatch-label">Border</div>
+    <div class="swatch-name">Linhas, separadores</div>
+    <div class="swatch-hex">#2A3148</div>
+  </div>
+  <div class="swatch sw-flare">
+    <span class="role-badge">CTA</span>
+    <div class="swatch-label">Flare</div>
+    <div class="swatch-name">Ação principal</div>
+    <div class="swatch-hex">#E8FF47</div>
+  </div>
+  <div class="swatch sw-ice">
+    <span class="role-badge">Destaque 2</span>
+    <div class="swatch-label">Ice</div>
+    <div class="swatch-name">Links, badges</div>
+    <div class="swatch-hex">#A8C4FF</div>
+  </div>
+  <div class="swatch sw-mist">
+    <span class="role-badge">Texto</span>
+    <div class="swatch-label">Mist</div>
+    <div class="swatch-name">Texto primário</div>
+    <div class="swatch-hex">#C8D0E0</div>
+  </div>
+  <div class="swatch sw-smoke">
+    <span class="role-badge">Texto 2</span>
+    <div class="swatch-label">Smoke</div>
+    <div class="swatch-name">Texto secundário</div>
+    <div class="swatch-hex">#8A93A8</div>
+  </div>
+</div>
+
+<!-- Accent row -->
+<div class="accent-row">
+  <div class="swatch sw-danger">
+    <span class="role-badge">Erro</span>
+    <div class="swatch-label">Danger</div>
+    <div class="swatch-hex">#FF5050</div>
+  </div>
+  <div class="swatch sw-success">
+    <span class="role-badge">Sucesso</span>
+    <div class="swatch-label">Success</div>
+    <div class="swatch-hex">#3DFFA0</div>
+  </div>
+</div>
+
+<!-- Usage mockups -->
+<div class="usage-section">
+  <div class="section-label">Contexto de uso</div>
+  <div class="usage-grid">
+
+    <div class="usage-card">
+      <h3>Card de produto</h3>
+      <div class="mock-game-card">
+        <div class="mock-game-thumb">
+          <div class="mock-thumb-inner">⚔️</div>
+        </div>
+        <div class="mock-game-info">
+          <div class="tag">RPG · Ação</div>
+          <div class="title">Abyssal Throne</div>
+          <div class="price-row">
+            <span class="price">R$ 79,90</span>
+            <button class="mock-btn">Comprar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="usage-card">
+      <h3>Banner promocional</h3>
+      <div class="mock-banner">
+        <div class="eyebrow">— Oferta da semana</div>
+        <h2>Até 70% off<br>em jogos indie</h2>
+        <p>Termina em 3 dias. Não perca.</p>
+        <div class="mock-banner-btns">
+          <button class="btn-primary">Ver ofertas</button>
+          <button class="btn-ghost">Explorar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="usage-card">
+      <h3>Navegação</h3>
+      <div class="mock-nav">
+        <div class="mock-nav-logo">VAULT</div>
+        <div class="mock-nav-links">
+          <a class="mock-nav-link active">Loja</a>
+          <a class="mock-nav-link">Biblioteca</a>
+          <a class="mock-nav-link">Ofertas</a>
+        </div>
+        <div class="mock-nav-cta">Entrar</div>
+      </div>
+    </div>
+
+    <div class="usage-card">
+      <h3>Tipografia</h3>
+      <div class="mock-typo">
+        <div class="t-display">Game of<br>the Year</div>
+        <div class="t-sub">Destaques da semana</div>
+        <div class="t-body">Descubra os títulos mais aclamados da temporada, curados pela nossa equipe.</div>
+        <div class="t-mono">// Syne + DM Mono</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Variables table -->
+<div class="vars-section">
+  <div class="section-label">Variáveis CSS</div>
+  <table class="vars-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Variável</th>
+        <th>Hex</th>
+        <th>Uso</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="td-dot" style="background:#0A0C10;border:1px solid #2A3148"></span></td>
+        <td class="td-var">--void</td>
+        <td class="td-hex">#0A0C10</td>
+        <td class="td-role">Fundo base, preto azulado</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#111520"></span></td>
+        <td class="td-var">--surface</td>
+        <td class="td-hex">#111520</td>
+        <td class="td-role">Cards e painéis primários</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#1C2133"></span></td>
+        <td class="td-var">--panel</td>
+        <td class="td-hex">#1C2133</td>
+        <td class="td-role">Elevação secundária</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#2A3148"></span></td>
+        <td class="td-var">--border</td>
+        <td class="td-hex">#2A3148</td>
+        <td class="td-role">Linhas, divisores, bordas</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#E8FF47"></span></td>
+        <td class="td-var">--flare</td>
+        <td class="td-hex">#E8FF47</td>
+        <td class="td-role">CTA principal, preços, destaques</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#B8CC38"></span></td>
+        <td class="td-var">--flare-dim</td>
+        <td class="td-hex">#B8CC38</td>
+        <td class="td-role">Hover do Flare</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#A8C4FF"></span></td>
+        <td class="td-var">--ice</td>
+        <td class="td-hex">#A8C4FF</td>
+        <td class="td-role">Links, tags, badges</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#6E94E8"></span></td>
+        <td class="td-var">--ice-dim</td>
+        <td class="td-hex">#6E94E8</td>
+        <td class="td-role">Hover/variante do Ice</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#C8D0E0"></span></td>
+        <td class="td-var">--mist</td>
+        <td class="td-hex">#C8D0E0</td>
+        <td class="td-role">Texto primário</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#8A93A8"></span></td>
+        <td class="td-var">--smoke</td>
+        <td class="td-hex">#8A93A8</td>
+        <td class="td-role">Texto secundário, placeholders</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#F0F4FF"></span></td>
+        <td class="td-var">--white</td>
+        <td class="td-hex">#F0F4FF</td>
+        <td class="td-role">Títulos, máximo contraste</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#FF5050"></span></td>
+        <td class="td-var">--danger</td>
+        <td class="td-hex">#FF5050</td>
+        <td class="td-role">Erros, alertas críticos</td>
+      </tr>
+      <tr>
+        <td><span class="td-dot" style="background:#3DFFA0"></span></td>
+        <td class="td-var">--success</td>
+        <td class="td-hex">#3DFFA0</td>
+        <td class="td-role">Conquistas, confirmações</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>VAULT DESIGN SYSTEM · PALETA v1.0</p>
+  <div class="footer-dots">
+    <span class="dot" style="background:#0A0C10;border:1px solid #2A3148"></span>
+    <span class="dot" style="background:#E8FF47"></span>
+    <span class="dot" style="background:#A8C4FF"></span>
+    <span class="dot" style="background:#C8D0E0"></span>
+    <span class="dot" style="background:#3DFFA0"></span>
+  </div>
+</footer>
+
+</body>
+</html>
