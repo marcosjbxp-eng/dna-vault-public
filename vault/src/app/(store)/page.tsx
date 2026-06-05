@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 async function getFeaturedGames() {
   try {
