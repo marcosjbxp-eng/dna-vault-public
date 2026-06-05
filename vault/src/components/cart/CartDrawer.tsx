@@ -19,7 +19,7 @@ export function CartDrawer() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[var(--z-drawer-backdrop)]"
             onClick={closeCart}
             aria-label="Fechar carrinho"
           />
@@ -29,21 +29,22 @@ export function CartDrawer() {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 400, damping: 40 }}
-            className="fixed right-0 top-0 h-full w-full sm:w-[420px] bg-[--surface] z-50 border-l border-[--border] flex flex-col"
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed right-0 top-0 h-full w-full sm:w-[440px] bg-[--surface] z-[var(--z-drawer)] border-l border-[--border] flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-[--border]">
-              <div className="flex items-center gap-2">
-                <ShoppingCart size={20} className="text-[--flare]" />
-                <h2 className="text-lg font-bold text-[--white]">Carrinho</h2>
-                <span className="text-sm text-[--smoke]">
-                  ({items.length})
+            <div className="flex items-center justify-between px-6 py-5 border-b border-[--border]">
+              <div className="flex items-baseline gap-3">
+                <h2 className="text-xl font-black text-[--white] tracking-tight">
+                  Carrinho
+                </h2>
+                <span className="font-mono text-xs text-[--smoke] tracking-wider">
+                  {items.length.toString().padStart(2, "0")} ITEM{items.length === 1 ? "" : "S"}
                 </span>
               </div>
               <button
                 onClick={closeCart}
-                className="p-1.5 rounded-lg hover:bg-[--panel] text-[--smoke] hover:text-[--white] transition-colors cursor-pointer"
+                className="p-1.5 hover:bg-[--panel] text-[--smoke] hover:text-[--white] transition-colors cursor-pointer"
                 aria-label="Fechar carrinho"
               >
                 <X size={20} />
@@ -79,9 +80,9 @@ export function CartDrawer() {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20, height: 0 }}
-                      className="flex gap-3 bg-[--panel] rounded-xl p-3"
+                      className="flex gap-3 bg-[--panel] border border-[--border] p-3"
                     >
-                      <div className="relative w-16 h-20 rounded-lg overflow-hidden flex-shrink-0">
+                      <div className="relative w-14 h-[72px] overflow-hidden flex-shrink-0">
                         <Image
                           src={item.coverUrl}
                           alt={item.title}
@@ -99,7 +100,7 @@ export function CartDrawer() {
                       </div>
                       <button
                         onClick={() => removeItem(item.gameId)}
-                        className="p-1.5 self-start rounded-lg hover:bg-[--danger]/10 text-[--smoke] hover:text-[--danger] transition-colors cursor-pointer"
+                        className="p-1.5 self-start hover:bg-[--danger]/10 text-[--smoke] hover:text-[--danger] transition-colors cursor-pointer"
                         aria-label={`Remover ${item.title}`}
                       >
                         <Trash2 size={16} />
@@ -112,18 +113,23 @@ export function CartDrawer() {
 
             {/* Footer / Summary */}
             {items.length > 0 && (
-              <div className="border-t border-[--border] p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-[--smoke]">Total</span>
-                  <span className="text-xl font-mono font-bold text-[--flare]">
-                    R$ {totalPrice().toFixed(2)}
+              <div className="border-t border-[--border] p-6 space-y-4 bg-[--surface]">
+                <div className="flex items-baseline justify-between">
+                  <span className="font-mono text-[11px] text-[--smoke] tracking-widest uppercase">
+                    Subtotal
+                  </span>
+                  <span className="text-2xl font-mono font-black text-[--flare]">
+                    R$ {totalPrice().toFixed(2).replace(".", ",")}
                   </span>
                 </div>
-                <Link href="/checkout" onClick={closeCart}>
+                <Link href="/checkout" onClick={closeCart} className="block">
                   <Button className="w-full" size="lg">
-                    Finalizar Compra
+                    Finalizar compra
                   </Button>
                 </Link>
+                <p className="text-[10px] text-center text-[--smoke] tracking-wider font-mono uppercase">
+                  Pagamento seguro · Mercado Pago
+                </p>
               </div>
             )}
           </motion.aside>

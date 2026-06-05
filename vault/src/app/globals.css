@@ -21,25 +21,43 @@
 
 :root {
   /* Backgrounds */
-  --void:      #0A0C10;   /* bg principal — quase preto azulado */
-  --surface:   #111520;   /* cards, painéis primários */
-  --panel:     #1C2133;   /* elevação secundária */
-  --border:    #2A3148;   /* linhas, divisores */
+  --void:      #0A0C10;
+  --surface:   #111520;
+  --panel:     #1C2133;
+  --border:    #2A3148;
 
   /* Accent */
-  --flare:     #E8FF47;   /* amarelo-lima elétrico — CTA principal, preços */
-  --flare-dim: #B8CC38;   /* hover do flare */
-  --ice:       #A8C4FF;   /* azul gelo — links, badges, destaques 2 */
-  --ice-dim:   #6E94E8;   /* hover/variante do ice */
+  --flare:     #E8FF47;
+  --flare-dim: #B8CC38;
+  --ice:       #A8C4FF;
+  --ice-dim:   #6E94E8;
 
   /* Texto */
-  --smoke:     #8A93A8;   /* texto secundário, placeholders */
-  --mist:      #C8D0E0;   /* texto primário */
-  --white:     #F0F4FF;   /* títulos, máximo contraste */
+  --smoke:     #8A93A8;
+  --mist:      #C8D0E0;
+  --white:     #F0F4FF;
 
   /* Semânticas */
-  --danger:    #FF5050;   /* erros, alertas críticos */
-  --success:   #3DFFA0;   /* confirmações, conquistas, keys entregues */
+  --danger:    #FF5050;
+  --success:   #3DFFA0;
+
+  /* Z-index scale */
+  --z-dropdown: 30;
+  --z-sticky: 40;
+  --z-drawer-backdrop: 50;
+  --z-drawer: 51;
+  --z-modal-backdrop: 60;
+  --z-modal: 61;
+  --z-toast: 70;
+  --z-tooltip: 80;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  background: var(--void);
 }
 
 body {
@@ -48,4 +66,72 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--flare);
+  color: var(--void);
+}
+
+/* Custom scrollbar — keeps brand voice */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--void);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border: 2px solid var(--void);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--panel);
+}
+
+/* Focus ring — accessibility */
+:focus-visible {
+  outline: 2px solid var(--flare);
+  outline-offset: 2px;
+}
+
+/* Vault keypad pattern — used as hero signature */
+.vault-grid {
+  background-image:
+    radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: center;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+/* Marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+.marquee-pause:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee-track { animation: none !important; }
 }

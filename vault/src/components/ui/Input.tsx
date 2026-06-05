@@ -23,11 +23,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={clsx(
-            "w-full bg-[--surface] border border-[--border] rounded-none px-4 py-2.5 text-sm text-[--mist]",
-            "placeholder:text-[--smoke]/50",
-            "focus:outline-none focus:border-[--ice-dim] focus:ring-1 focus:ring-[--ice-dim]",
+            "w-full bg-[--surface] border border-[--border] rounded-none px-4 py-2.5 text-sm text-[--white]",
+            "placeholder:text-[--smoke]",
+            "focus:outline-none focus:border-[--flare] focus-visible:outline-none",
             "transition-colors duration-200",
-            error && "border-[--danger] focus:border-[--danger] focus:ring-[--danger]",
+            error && "border-[--danger] focus:border-[--danger]",
             className
           )}
           {...props}

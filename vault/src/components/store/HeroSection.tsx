@@ -3,97 +3,122 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui";
 import Link from "next/link";
-import { ArrowUpRight, Shield } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+
+const PLATFORMS = ["Steam", "Epic Games", "PlayStation", "Xbox", "Ubisoft", "EA"];
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-[--border]/40 bg-[--void]">
-      {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 py-20 flex flex-col items-center">
-        {/* Badge estático premium */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="will-change-[transform,opacity] mb-8"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[--surface] border border-[--border] text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[--smoke] hover:text-[--white] transition-colors duration-300 rounded-none">
-            <span>Sua coleção começa aqui</span>
-          </div>
-        </motion.div>
+    <section className="relative overflow-hidden border-b border-[--border]/50">
+      {/* Signature vault-grid backdrop */}
+      <div className="absolute inset-0 vault-grid opacity-60 pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[--void] to-transparent pointer-events-none" />
 
-        {/* Hero Title & Description */}
-        <div className="text-center space-y-6 max-w-4xl">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="will-change-[transform,opacity] text-4xl sm:text-6xl md:text-7xl font-black text-[--white] leading-[1.05] tracking-tight"
-          >
-            Jogos digitais.
-            <br />
-            <span className="text-[--flare]">
-              Entrega instantânea.
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 sm:pt-24 sm:pb-28">
+        <div className="grid grid-cols-12 gap-6 items-end">
+          {/* Left rail — eyebrow stack */}
+          <div className="hidden lg:flex col-span-1 flex-col gap-3 pb-2">
+            <span className="w-px h-12 bg-[--flare]" />
+            <span className="font-mono text-[10px] text-[--smoke] [writing-mode:vertical-rl] rotate-180 tracking-widest">
+              VAULT.STORE / 2026
             </span>
-          </motion.h1>
+          </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="will-change-[transform,opacity] text-sm sm:text-base md:text-lg text-[--smoke] max-w-2xl mx-auto leading-relaxed"
-          >
-            Keys originais e licenciadas com os melhores valores do mercado. 
-            Pague com PIX ou Cartão e comece a jogar imediatamente no Steam, Epic ou Playstation.
-          </motion.p>
+          {/* Heading column */}
+          <div className="col-span-12 lg:col-span-8 space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <p className="font-mono text-[11px] text-[--flare] tracking-[0.3em] mb-5">
+                — LOJA DE KEYS DIGITAIS
+              </p>
+              <h1 className="text-[clamp(2.75rem,8.5vw,6rem)] font-black text-[--white] leading-[0.95] tracking-[-0.04em]">
+                O cofre dos
+                <br />
+                seus jogos<span className="text-[--flare]">.</span>
+              </h1>
+            </motion.div>
 
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="text-base sm:text-lg text-[--mist] max-w-xl leading-relaxed"
+            >
+              Keys originais para Steam, Epic e PlayStation. Pague com PIX,
+              receba na hora, jogue em segundos. Sem cadastros longos,
+              sem espera, sem letras miúdas.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
+            >
+              <Link href="/store">
+                <Button size="lg" className="w-full sm:w-auto group/cta">
+                  <span>Explorar catálogo</span>
+                  <ArrowRight
+                    size={18}
+                    className="transition-transform duration-300 group-hover/cta:translate-x-1"
+                  />
+                </Button>
+              </Link>
+              <Link
+                href="/store?filter=promo"
+                className="inline-flex items-center justify-center gap-2 text-sm font-semibold text-[--smoke] hover:text-[--white] transition-colors px-5 py-3 underline underline-offset-4 decoration-[--border] hover:decoration-[--flare]"
+              >
+                Ver promoções da semana
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Numeric right rail — vault keypad nod */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="will-change-[transform,opacity] pt-6 flex flex-col sm:flex-row items-center justify-center gap-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="hidden lg:flex col-span-3 flex-col items-end gap-3 pb-2"
           >
-            <Link href="/store" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full sm:w-auto text-xs sm:text-sm px-8 rounded-none uppercase tracking-wider flex items-center justify-center gap-1.5 font-bold">
-                <span>Explorar Loja</span>
-                <ArrowUpRight size={16} />
-              </Button>
-            </Link>
-            <Link href="/store?filter=promo" className="w-full sm:w-auto">
-              <Button variant="secondary" size="lg" className="w-full sm:w-auto text-xs sm:text-sm px-8 rounded-none uppercase tracking-wider font-bold">
-                Ver Promoções
-              </Button>
-            </Link>
+            <div className="font-mono text-[10px] text-[--smoke] tracking-widest">
+              CATÁLOGO ATIVO
+            </div>
+            <div className="grid grid-cols-3 gap-1.5 w-fit">
+              {["5", "0", "0", "+", "T", "I", "T", "U", "L"].map((c, i) => (
+                <div
+                  key={i}
+                  className="w-9 h-9 border border-[--border] flex items-center justify-center font-mono text-xs text-[--mist] bg-[--surface]/40"
+                >
+                  {c}
+                </div>
+              ))}
+            </div>
           </motion.div>
         </div>
 
-        {/* Info panel below hero - Refatorado de forma minimalista sem caixas pesadas */}
+        {/* Platform strip — concrete trust, no stat-grid trope */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="will-change-[transform,opacity] mt-20 w-full max-w-3xl grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-4 divide-y sm:divide-y-0 sm:divide-x divide-[--border]/40 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-20 pt-8 border-t border-[--border]/60 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8"
         >
-          {[
-            { value: "500+", label: "Títulos Ativos" },
-            { value: "100%", label: "Keys Originais", icon: Shield },
-            { value: "PIX", label: "Envio Imediato" },
-          ].map(({ value, label, icon: Icon }, idx) => (
-            <div
-              key={idx}
-              className="flex flex-col items-center justify-center pt-6 sm:pt-0 sm:px-4 group"
-            >
-              <div className="flex items-center gap-2">
-                {Icon && <Icon size={18} className="text-[--smoke] group-hover:text-[--flare] transition-colors" />}
-                <p className="text-2xl sm:text-3xl font-extrabold text-[--white] tracking-tight">
-                  {value}
-                </p>
-              </div>
-              <p className="text-[10px] text-[--smoke] uppercase tracking-widest mt-2 font-bold">
-                {label}
-              </p>
-            </div>
-          ))}
+          <span className="font-mono text-[10px] text-[--smoke] tracking-[0.25em] uppercase shrink-0">
+            Compatível com
+          </span>
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            {PLATFORMS.map((p) => (
+              <span
+                key={p}
+                className="text-sm font-semibold text-[--mist] hover:text-[--white] transition-colors"
+              >
+                {p}
+              </span>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

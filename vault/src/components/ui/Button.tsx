@@ -1,13 +1,12 @@
 "use client";
 
 import { forwardRef } from "react";
-import { motion } from "framer-motion";
 import { clsx } from "clsx";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 type ButtonSize = "sm" | "md" | "lg";
 
-interface ButtonProps extends React.ComponentPropsWithoutRef<typeof motion.button> {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
@@ -16,30 +15,30 @@ interface ButtonProps extends React.ComponentPropsWithoutRef<typeof motion.butto
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-flare text-void font-bold hover:bg-flare-dim",
+    "bg-[--flare] text-[--void] font-black hover:bg-[--white] active:bg-[--flare-dim]",
   secondary:
-    "bg-panel text-mist border border-border hover:border-border/80 hover:bg-panel/80 hover:text-white",
+    "bg-transparent text-[--mist] border border-[--border] hover:border-[--flare] hover:text-[--white]",
   ghost:
-    "bg-transparent text-smoke hover:text-white hover:bg-surface",
+    "bg-transparent text-[--smoke] hover:text-[--white] hover:bg-[--surface]",
   danger:
-    "bg-danger/10 text-danger border border-danger/30 hover:bg-danger/20",
+    "bg-[--danger]/10 text-[--danger] border border-[--danger]/30 hover:bg-[--danger]/20",
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "px-3 py-1.5 text-xs rounded-none",
-  md: "px-5 py-2.5 text-sm rounded-none",
-  lg: "px-7 py-3 text-base rounded-none",
+  sm: "px-3.5 py-2 text-[11px]",
+  md: "px-5 py-2.5 text-xs",
+  lg: "px-7 py-3.5 text-sm",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ variant = "primary", size = "md", loading, className, children, disabled, ...props }, ref) => {
     return (
-      <motion.button
+      <button
         ref={ref}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.97 }}
         className={clsx(
-          "inline-flex items-center justify-center gap-2 font-semibold transition-colors duration-200 cursor-pointer",
+          "inline-flex items-center justify-center gap-2 font-bold tracking-wider uppercase",
+          "transition-[background-color,color,border-color,transform] duration-200 ease-out",
+          "active:scale-[0.98] cursor-pointer rounded-none",
           "disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none",
           variants[variant],
           sizes[size],
@@ -53,6 +52,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             className="animate-spin h-4 w-4"
             viewBox="0 0 24 24"
             fill="none"
+            aria-hidden="true"
           >
             <circle
               className="opacity-25"
@@ -70,7 +70,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         )}
         {children}
-      </motion.button>
+      </button>
     );
   }
 );
